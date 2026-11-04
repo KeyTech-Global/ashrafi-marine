@@ -60,7 +60,7 @@ export const metadata: Metadata = {
       "Quality dry fish. Reliable wholesale supply. Wholesale and bulk enquiries for Jawla, mixed dry fish and other varieties — Madh Island, Mumbai, serving buyers across India.",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "Ashrafi Marine Products — dry fish wholesale, Madh Island, Mumbai",
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     title,
     description:
       "Dry fish wholesale and bulk supply enquiries — Madh Island, Mumbai, serving buyers across India.",
-    images: ["/opengraph-image"],
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    icon: [{ url: `${site.url}/icon.svg`, type: "image/svg+xml" }],
   },
   formatDetection: {
     telephone: true,

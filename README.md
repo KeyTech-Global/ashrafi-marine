@@ -16,8 +16,8 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000).
 
 ```bash
-npm run build   # production build + type check
-npm run start   # serve the production build
+npm run build   # static export to ./out (also type-checks)
+npm run start   # serve the exported ./out folder locally
 npm run lint    # ESLint
 ```
 
@@ -82,7 +82,7 @@ To connect a real backend later, replace the `window.open(...)` call in [`src/co
   - navy `#071C2C`, marine `#123B52`, teal `#087F83`, pearl `#F8FAFA`, sand `#E8DCC5`, gold `#C5A46D`
   - Playfair Display for display type, Manrope for UI text
 - **Logo** — `src/components/logo.tsx` (inline SVG, light/dark and compact variants)
-- **Favicon** — `src/app/icon.svg`
+- **Favicon** — `public/icon.svg`
 - **Photography map** — `src/content/images.ts` (paths, alt text, dimensions and blur placeholders)
 - **Navigation, products, regions, process steps, FAQs** — `src/content/site.ts`
 
@@ -106,17 +106,23 @@ The scripts resize, convert to WebP, generate low-resolution blur data URLs and 
 
 - Per-page metadata and canonical URLs are set in each `page.tsx` using the `pageMetadata` helper in `src/lib/metadata.ts`, which keeps the shared Open Graph image, type and site name on every page.
 - Global metadata, Open Graph and Twitter cards are in `src/app/layout.tsx`.
-- `src/app/opengraph-image.tsx` generates the 1200×630 social image with `next/og`.
+- `public/og-image.png` is the 1200×630 social preview image.
 - `src/app/sitemap.ts` and `src/app/robots.ts` publish crawl directives.
 - Organization + LocalBusiness JSON-LD is emitted from the root layout (locality only, no street address).
 
-Set the production domain with an environment variable:
+Set the production origin with an environment variable:
 
 ```bash
 NEXT_PUBLIC_SITE_URL=https://www.ashrafimarineproducts.com
 ```
 
-If unset, the site falls back to that domain. Use the final live domain in production so canonical URLs, the sitemap and social images resolve correctly.
+For a GitHub Pages project site, also set the sub-path the site is served from:
+
+```bash
+NEXT_PUBLIC_BASE_PATH=/ashrafi-marine
+```
+
+`NEXT_PUBLIC_SITE_URL` must be the origin only (no sub-path). Canonical URLs, Open Graph tags, the sitemap, robots and JSON-LD are all built from `NEXT_PUBLIC_SITE_URL` + `NEXT_PUBLIC_BASE_PATH`. If unset, the site falls back to `https://www.ashrafimarineproducts.com` with no sub-path.
 
 ---
 
@@ -134,7 +140,7 @@ If unset, the site falls back to that domain. Use the final live domain in produ
 
 ```text
 src/
-  app/                 routes, layout, SEO files, OG image, 404
+  app/                 routes, layout, SEO files, 404
   components/          layout, brand, motion and page sections
   components/home/     home-page sections
   content/             business content and image metadata
@@ -147,10 +153,44 @@ scripts/               image preparation and image-map generation
 
 ## Deployment
 
-The site is a standard Next.js app and can be deployed to Vercel or any Node host.
+The site is configured as a **static export** (`output: "export"` in `next.config.ts`) and is deployed to GitHub Pages by [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml). No Node.js server or environment secrets are required at runtime.
 
-1. Set `NEXT_PUBLIC_SITE_URL` to the production URL.
-2. Run `npm run build`.
-3. Deploy the `.next` output using your platform’s Next.js adapter.
+### Live URL
 
-No environment secrets are required for the current WhatsApp-only enquiry flow.
+```text
+https://keytech-global.github.io/ashrafi-marine/
+```
+
+### How the workflow works
+
+1. Pushes to `main` (or a manual run) trigger the workflow.
+2. `npm ci` installs dependencies and `npm run build` writes the static site to `out/`.
+3. The build uses:
+   - `NEXT_PUBLIC_SITE_URL=https://keytech-global.github.io`
+   - `NEXT_PUBLIC_BASE_PATH=/ashrafi-marine`
+4. The `out/` folder is uploaded as a Pages artifact and deployed.
+
+To enable Pages for a repository, set **Settings → Pages → Build and deployment → Source** to **GitHub Actions** (or run `gh api -X POST repos/OWNER/REPO/pages -f build_type=workflow`).
+
+### Deploying from this machine
+
+Authenticate GitHub CLI with an account that can push to the target repository, then create and push:
+
+```bash
+gh auth login --hostname github.com --git-protocol https --with-token
+gh auth status
+gh repo create KeyTech-Global/ashrafi-marine --public --source=. --remote=keytech --push
+```
+
+If pushing to a repository that already exists:
+
+```bash
+git remote add keytech https://github.com/KeyTech-Global/ashrafi-marine.git
+git push -u keytech main
+```
+
+The repository must be **public** to use GitHub Pages on a free plan.
+
+### Custom domain later
+
+If the site moves to its own domain, remove `NEXT_PUBLIC_BASE_PATH` (or set it to an empty string), set `NEXT_PUBLIC_SITE_URL` to the domain, and add the domain under **Settings → Pages → Custom domain**. Rebuild and redeploy after changing either value.

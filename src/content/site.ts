@@ -1,12 +1,33 @@
+/**
+ * Origin only, e.g. https://keytech-global.github.io. Do not include a sub-path
+ * here; the GitHub Pages sub-path comes from NEXT_PUBLIC_BASE_PATH.
+ */
+const siteOrigin =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  "https://www.ashrafimarineproducts.com";
+
+/**
+ * Sub-path the site is served from at build time ("" or "/ashrafi-marine").
+ * Next.js reads the same value in next.config.ts for basePath.
+ */
+export const basePath = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(
+  /\/$/,
+  "",
+);
+
+/** Prefixes a root-relative asset path with the deployment base path. */
+export function withBasePath(path: string) {
+  if (!basePath || !path.startsWith("/")) return path;
+  return `${basePath}${path}`;
+}
+
 export const site = {
   name: "Ashrafi Marine Products",
   shortName: "Ashrafi Marine",
   tagline: "Quality dry fish. Reliable wholesale supply.",
   description:
     "Ashrafi Marine Products is a dry fish merchant and wholesale supplier based in Madh Island, Mumbai, serving wholesale buyers, retailers, distributors and commercial buyers across India.",
-  url:
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-    "https://www.ashrafimarineproducts.com",
+  url: `${siteOrigin}${basePath}`,
   location: {
     locality: "Madh Island",
     city: "Mumbai",

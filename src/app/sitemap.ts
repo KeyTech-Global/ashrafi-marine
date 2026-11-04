@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/content/site";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes: Array<{
     path: string;
@@ -16,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return routes.map((route) => ({
-    url: `${site.url}${route.path}`,
+    url: route.path === "" ? `${site.url}/` : `${site.url}${route.path}/`,
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));

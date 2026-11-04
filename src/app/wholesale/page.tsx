@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import Link from "next/link";
 import {
   ArrowUpRight,
@@ -10,8 +9,8 @@ import {
 import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
-import { EnquiryForm } from "@/components/enquiry-form";
 import { SiteImage } from "@/components/site-image";
+import { WholesaleEnquiry } from "@/components/wholesale-enquiry";
 import { contacts, processSteps, products, site } from "@/content/site";
 import { defaultWhatsAppMessage, whatsappLink } from "@/lib/whatsapp";
 import { pageMetadata } from "@/lib/metadata";
@@ -65,15 +64,7 @@ const notListed = [
   "No stored enquiry database",
 ];
 
-type WholesaleSearchParams = Promise<{
-  [key: string]: string | string[] | undefined;
-}>;
-
-export default function WholesalePage({
-  searchParams,
-}: {
-  searchParams: WholesaleSearchParams;
-}) {
+export default function WholesalePage() {
   return (
     <>
       <PageHero
@@ -438,30 +429,9 @@ export default function WholesalePage({
             </Reveal>
           </div>
 
-          <Suspense fallback={<EnquiryForm intent="Wholesale enquiry" />}>
-            <WholesaleEnquiry searchParams={searchParams} />
-          </Suspense>
+          <WholesaleEnquiry />
         </div>
       </section>
     </>
-  );
-}
-
-async function WholesaleEnquiry({
-  searchParams,
-}: {
-  searchParams: WholesaleSearchParams;
-}) {
-  const params = await searchParams;
-  const requested =
-    typeof params.product === "string" ? params.product : undefined;
-  const matched = products.find((product) => product.slug === requested);
-
-  return (
-    <EnquiryForm
-      key={matched?.slug ?? "default"}
-      intent="Wholesale enquiry"
-      initialProduct={matched?.slug}
-    />
   );
 }

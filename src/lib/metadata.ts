@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { site } from "@/content/site";
 
 const ogImage = {
-  url: "/opengraph-image",
+  url: "/og-image.png",
   width: 1200,
   height: 630,
   alt: "Ashrafi Marine Products — dry fish wholesale, Madh Island, Mumbai",
@@ -43,7 +43,7 @@ export function pageMetadata({
       card: "summary_large_image",
       title: openGraphTitle,
       description: openGraphDescription,
-      images: ["/opengraph-image"],
+      images: ["/og-image.png"],
     },
   };
 }

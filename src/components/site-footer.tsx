@@ -4,13 +4,10 @@ import { contacts, navigation, products } from "@/content/site";
 import { Logo } from "@/components/logo";
 import { defaultWhatsAppMessage, whatsappLink } from "@/lib/whatsapp";
 
-async function copyrightYear() {
-  "use cache";
-  return new Date().getFullYear();
-}
+const copyrightYear = new Date().getFullYear();
 
-export async function SiteFooter() {
-  const year = await copyrightYear();
+export function SiteFooter() {
+  const year = copyrightYear;
 
   return (
     <footer className="relative overflow-hidden bg-navy text-pearl">
