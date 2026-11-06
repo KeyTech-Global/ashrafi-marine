@@ -158,15 +158,17 @@ The site is configured as a **static export** (`output: "export"` in `next.confi
 ### Live URL
 
 ```text
-https://keytech-global.github.io/ashrafi-marine/
+https://keytechglobal.in/ashrafi-marine/
 ```
+
+The KeyTech-Global organisation site uses the custom domain `keytechglobal.in`, and GitHub Pages serves project sites under that domain. The `keytech-global.github.io/ashrafi-marine/` URL redirects here, so all canonical and Open Graph URLs use the custom domain.
 
 ### How the workflow works
 
 1. Pushes to `main` (or a manual run) trigger the workflow.
-2. `npm ci` installs dependencies and `npm run build` writes the static site to `out/`.
+2. `npm install` installs dependencies and `npm run build` writes the static site to `out/`.
 3. The build uses:
-   - `NEXT_PUBLIC_SITE_URL=https://keytech-global.github.io`
+   - `NEXT_PUBLIC_SITE_URL=https://keytechglobal.in`
    - `NEXT_PUBLIC_BASE_PATH=/ashrafi-marine`
 4. The `out/` folder is uploaded as a Pages artifact and deployed.
 

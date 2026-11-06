@@ -35,8 +35,9 @@ jobs:
       - name: Build static export
         run: npm run build
         env:
-          # Project site URL: https://keytech-global.github.io/ashrafi-marine/
-          NEXT_PUBLIC_SITE_URL: https://keytech-global.github.io
+          # Project site URL: https://keytechglobal.in/ashrafi-marine/
+          # (GitHub redirects the github.io URL to the org's custom domain.)
+          NEXT_PUBLIC_SITE_URL: https://keytechglobal.in
           NEXT_PUBLIC_BASE_PATH: /ashrafi-marine
 
       - name: Disable Jekyll processing
@@ -44,8 +45,6 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
